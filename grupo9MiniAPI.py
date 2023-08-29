@@ -36,25 +36,34 @@ mycursor = mydb.cursor()
 mycursor.execute("CREATE DATABASE IF NOT EXISTS `registro`;")
 mycursor.execute("USE registro;")
 
-mycursor.execute("""CREATE TABLE IF NOT EXISTS `CPU` (
-	idCPU INT PRIMARY KEY AUTO_INCREMENT,
-    valor INT,
-    horario TIME
-    );"""
+mycursor.execute(
+    """
+        CREATE TABLE IF NOT EXISTS `CPU` (
+        idCPU INT PRIMARY KEY AUTO_INCREMENT,
+        valor INT,
+        horario TIME
+        ); 
+    """
 )
 
-mycursor.execute("""CREATE TABLE IF NOT EXISTS `RAM` (
-	idRAM INT PRIMARY KEY AUTO_INCREMENT,
-    valor INT,
-    horario TIME
-    );"""
+mycursor.execute(
+    """
+        CREATE TABLE IF NOT EXISTS `RAM` (
+            idRAM INT PRIMARY KEY AUTO_INCREMENT,
+            valor INT,
+            horario TIME
+        );
+        """
 )
 
-mycursor.execute("""CREATE TABLE IF NOT EXISTS `disco` (
-	idDisco INT PRIMARY KEY AUTO_INCREMENT,
-    valor INT,
-    horario TIME
-    );"""
+mycursor.execute(
+    """
+        CREATE TABLE IF NOT EXISTS `disco` (
+        idDisco INT PRIMARY KEY AUTO_INCREMENT,
+        valor INT,
+        horario TIME
+        );
+    """
 )
 
 
