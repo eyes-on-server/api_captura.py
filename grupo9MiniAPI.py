@@ -3,6 +3,7 @@ import datetime as dt
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 import mysql.connector
+import platform
 
 # Criando a tela para plotagem do gráfico
 # Onde: canvas -> é a tela para plotagem
@@ -56,95 +57,70 @@ mycursor.execute("""CREATE TABLE IF NOT EXISTS `disco` (
     );"""
 )
 
-def plotarGraficoCPU(i, eixo_x_CPU, eixo_y_CPU):
 
+def insert_CPU():
     # Capturar a % de uso da CPU
     cpuPercent = psutil.cpu_percent()
     horarioAtual = dt.datetime.now().strftime('%H:%M:%S')
 
-    # Adicionando o horário e a % de uso da CPU para os eixos x, y
-    eixo_x_CPU.append(horarioAtual)
-    eixo_y_CPU.append(cpuPercent)
-    
-    # Limitando a quantidade de dados a serem exibidos
-    eixo_x_CPU = eixo_x_CPU[-10:]
-    eixo_y_CPU = eixo_y_CPU[-10:]
-
-    # Plotagem do gráfico
-    axCPU.clear()
-    axCPU.plot(eixo_x_CPU, eixo_y_CPU)
-
-    # Título e legendas
-    axCPU.set_title('Uso da CPU')
-    axCPU.set_ylabel('CPU (%)')
-
-    print(f"CPU: ", cpuPercent, "%")
     comando = f"INSERT INTO `CPU` VALUES (null, {cpuPercent}, '{horarioAtual}');"
     mycursor.execute(comando)
     mydb.commit()
 
 
-
-def plotarGraficoRAM(i, eixo_x_RAM, eixo_y_RAM):
-
-    # Capturar a % de uso da RAM
+def insert_RAM():
     memoryUsage =  psutil.virtual_memory()
     horarioAtual = dt.datetime.now().strftime('%H:%M:%S')
 
-    # Adicionando o horário e a % de uso da RAM para os eixos x, y
-    eixo_x_RAM.append(horarioAtual)
-    eixo_y_RAM.append(memoryUsage.percent)
-
-    # Limitando a quantidade de dados a serem exibidos
-    eixo_x_RAM = eixo_x_RAM[-10:]
-    eixo_y_RAM = eixo_y_RAM[-10:]
-
-    # Plotagem do gráfico
-    axRAM.clear()
-    axRAM.plot(eixo_x_RAM, eixo_y_RAM)
-
-    # Título e legendas
-    axRAM.set_title('Uso da RAM')
-    axRAM.set_ylabel('RAM (%)')
-
-    print(f"Memória: ", memoryUsage.percent, "%")
     comando = f"INSERT INTO `RAM` VALUES (null, {memoryUsage.percent}, '{horarioAtual}');"
     mycursor.execute(comando)
     mydb.commit()
 
 
-
-def plotarGraficoDisco(i, eixo_x_Disco, eixo_y_Disco):
-
-    # Capturar a % de uso do Disco
-    diskUsage = psutil.disk_usage('C:\\')
+def insert_disco():
+    if platform.system() == "Linux":
+        caminho = '/'
+    else:
+        caminho = 'C:\\'
+    diskUsage = psutil.disk_usage(caminho)
     horarioAtual = dt.datetime.now().strftime('%H:%M:%S')
-
-    # Adicionando o horário e a % de uso do Disco para os eixos x, y
-    eixo_x_Disco.append(horarioAtual)
-    eixo_y_Disco.append(diskUsage.percent)
-
-    # Limitando a quantidade de dados a serem exibidos
-    eixo_x_Disco = eixo_x_Disco[-10:]
-    eixo_y_Disco = eixo_y_Disco[-10:]
-
-    # Plotagem do gráfico
-    axDisco.clear()
-    axDisco.plot(eixo_x_Disco, eixo_y_Disco)
-
-    # Título e legendas
-    axDisco.set_title('Uso do Disco')
-    axDisco.set_ylabel('Disco (%)')
-
-    print(f"Disco: ", diskUsage.percent, "%")
+    
     comando = f"INSERT INTO `disco` VALUES (null, {diskUsage.percent}, '{horarioAtual}');"
     mycursor.execute(comando)
     mydb.commit()
 
 
-# Chamada recursiva da função com (lugar onde irá ser plotado, eixos, intervalo)
-graficoCPU = animation.FuncAnimation(canvas, plotarGraficoCPU, fargs=(eixo_x_CPU, eixo_y_CPU), interval=1000)
-graficoRAM = animation.FuncAnimation(canvas, plotarGraficoRAM, fargs=(eixo_x_RAM, eixo_y_RAM), interval=1000)
-graficoDisco = animation.FuncAnimation(canvas, plotarGraficoDisco, fargs=(eixo_x_Disco, eixo_y_Disco), interval=1000)
-plt.show()
+def plotar_grafico(i,insert_function, eixo_x, eixo_y,  subplot, select):
+    print(select)
+    #Fazer o insert
+    insert_function()
 
+    # Adicionando o horário e a % de uso da CPU para os eixos x, y
+    mycursor.execute(select)
+
+    myresult = mycursor.fetchall()
+    
+    # Limitando a quantidade de dados a serem exibidos
+    if len(eixo_x_CPU) < 10:
+        eixo_y.append(myresult[-1][1])
+        eixo_x.append(str(myresult[-1][2]))
+    else:
+        del eixo_x[0]
+        eixo_y.append(myresult[-1][1])
+        del eixo_y[0]
+        eixo_x.append(str(myresult[-1][2]))
+    
+    # Plotagem do gráfico
+    subplot.clear()
+    subplot.plot(eixo_x, eixo_y)
+
+    # Título e legendas
+    subplot.set_title('Uso da CPU')
+    subplot.set_ylabel('CPU (%)')
+
+
+# Chamada recursiva da função com (lugar onde irá ser plotado, eixos, intervalo)
+grafico_CPU = animation.FuncAnimation(canvas, plotar_grafico, fargs=(insert_CPU,eixo_x_CPU, eixo_y_CPU, axCPU, "SELECT * FROM CPU"), interval=1000)
+grafico_RAM = animation.FuncAnimation(canvas, plotar_grafico, fargs=(insert_RAM,eixo_x_RAM, eixo_y_RAM, axRAM, "SELECT * FROM RAM"), interval=1000)
+grafico_disco = animation.FuncAnimation(canvas, plotar_grafico, fargs=(insert_disco,eixo_x_Disco, eixo_y_Disco, axDisco, "SELECT * FROM disco"), interval=1000)
+plt.show()
