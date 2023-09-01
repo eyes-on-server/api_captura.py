@@ -110,7 +110,7 @@ def plotar_grafico(i,insert_function, eixo_x, eixo_y,  subplot, select):
     myresult = mycursor.fetchall()
     
     # Limitando a quantidade de dados a serem exibidos
-    if len(eixo_x_CPU) < 10:
+    if len(eixo_x) < 10:
         eixo_y.append(myresult[-1][1])
         eixo_x.append(str(myresult[-1][2]))
     else:
