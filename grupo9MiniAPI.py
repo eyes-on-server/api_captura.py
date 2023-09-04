@@ -99,7 +99,7 @@ def insert_disco():
     mydb.commit()
 
 
-def plotar_grafico(i,insert_function, eixo_x, eixo_y,  subplot, select):
+def plotar_grafico(i,insert_function, eixo_x, eixo_y,  subplot, select, dispositivo):
     print(select)
     #Fazer o insert
     insert_function()
@@ -124,12 +124,12 @@ def plotar_grafico(i,insert_function, eixo_x, eixo_y,  subplot, select):
     subplot.plot(eixo_x, eixo_y)
 
     # Título e legendas
-    subplot.set_title('Uso da CPU')
-    subplot.set_ylabel('CPU (%)')
+    subplot.set_title(f'Uso da {dispositivo}')
+    subplot.set_ylabel(f'{dispositivo} (%)')
 
 
 # Chamada recursiva da função com (lugar onde irá ser plotado, eixos, intervalo)
-grafico_CPU = animation.FuncAnimation(canvas, plotar_grafico, fargs=(insert_CPU,eixo_x_CPU, eixo_y_CPU, axCPU, "SELECT * FROM CPU"), interval=1000)
-grafico_RAM = animation.FuncAnimation(canvas, plotar_grafico, fargs=(insert_RAM,eixo_x_RAM, eixo_y_RAM, axRAM, "SELECT * FROM RAM"), interval=1000)
-grafico_disco = animation.FuncAnimation(canvas, plotar_grafico, fargs=(insert_disco,eixo_x_Disco, eixo_y_Disco, axDisco, "SELECT * FROM disco"), interval=1000)
+grafico_CPU = animation.FuncAnimation(canvas, plotar_grafico, fargs=(insert_CPU,eixo_x_CPU, eixo_y_CPU, axCPU, "SELECT * FROM CPU", "CPU"), interval=1000)
+grafico_RAM = animation.FuncAnimation(canvas, plotar_grafico, fargs=(insert_RAM,eixo_x_RAM, eixo_y_RAM, axRAM, "SELECT * FROM RAM", "RAM"), interval=1000)
+grafico_disco = animation.FuncAnimation(canvas, plotar_grafico, fargs=(insert_disco,eixo_x_Disco, eixo_y_Disco, axDisco, "SELECT * FROM disco", "Disco"), interval=1000)
 plt.show()
