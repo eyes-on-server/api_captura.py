@@ -4,6 +4,8 @@ import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 import mysql.connector
 import platform
+import chamadoJira
+import slack
 
 # Criando a tela para plotagem do gráfico
 # Onde: canvas -> é a tela para plotagem
@@ -69,19 +71,42 @@ mycursor.execute(
 
 def insert_CPU():
     # Capturar a % de uso da CPU
+    cpuFreq = psutil.cpu_freq().current * 10**-3
     cpuPercent = psutil.cpu_percent()
     horarioAtual = dt.datetime.now().strftime('%H:%M:%S')
 
-    comando = f"INSERT INTO `CPU` VALUES (null, {cpuPercent}, '{horarioAtual}');"
+    alert = "ATENÇÃO! \nSua CPU entrou em estado de alerta. \nPorcentagem atual: " + str(cpuPercent)
+    desc = "CPU está em um nível muito elevado de frequência. \nFrequência bruta: " + str(round(cpuFreq,2)) + "\nFrequência em porcentagem: " + str(cpuPercent)
+    sum = "Sua CPU entrou em estado de alerta."
+
+    if cpuPercent > 50 and cpuPercent < 70:
+        slack.slackAlerta(alert)
+    else:
+        slack.slackAlerta(alert)
+        chamadoJira.chamado(sum, desc)
+
+    comando = f"INSERT INTO `CPU` VALUES (null, {cpuFreq}, '{horarioAtual}');"
     mycursor.execute(comando)
     mydb.commit()
 
 
 def insert_RAM():
-    memoryUsage =  psutil.virtual_memory()
+    memoryUsage = psutil.virtual_memory().used * 10**-9
+    memoryUsagePercent = psutil.virtual_memory().percent
     horarioAtual = dt.datetime.now().strftime('%H:%M:%S')
 
-    comando = f"INSERT INTO `RAM` VALUES (null, {memoryUsage.percent}, '{horarioAtual}');"
+    alert = "ATENÇÃO! \nSua RAM entrou em estado de alerta. \nPorcentagem atual: " + str(memoryUsagePercent)
+    desc = "Foi monitorado que a RAM está ficando sem espaço. \nRAM consumida: " + str(round(memoryUsage,2)) + "\nRAM em porcentagem: " + str(memoryUsagePercent)
+    sum = "Sua RAM entrou em estado de alerta."
+
+
+    if memoryUsagePercent > 50 and memoryUsagePercent < 70:
+        slack.slackAlerta(alert)
+    else:
+        slack.slackAlerta(alert)
+        chamadoJira.chamado(sum, desc)
+
+    comando = f"INSERT INTO `RAM` VALUES (null, {memoryUsage}, '{horarioAtual}');"
     mycursor.execute(comando)
     mydb.commit()
 
@@ -91,10 +116,21 @@ def insert_disco():
         caminho = '/'
     else:
         caminho = 'C:\\'
-    diskUsage = psutil.disk_usage(caminho)
+    diskUsage = psutil.disk_usage(caminho).used * 10**-9
+    diskUsagePercent = psutil.disk_usage(caminho).percent
     horarioAtual = dt.datetime.now().strftime('%H:%M:%S')
+
+    alert = "ATENÇÃO! \nSeu disco entrou em estado de alerta. \nPorcentagem atual: " + str(diskUsagePercent)
+    desc = "Foi identificado que seu disco está com pouco espaço. \nEspaço de disco consumido: " + str(round(diskUsage,2)) + "\nDisco em porcentagem: " + str(diskUsagePercent)
+    sum = "Seu disco entrou em estado de alerta."
+
+    if diskUsagePercent > 60 and diskUsagePercent < 80:
+        slack.slackAlerta(alert)
+    else:
+        slack.slackAlerta(alert)
+        chamadoJira.chamado(sum, desc)
     
-    comando = f"INSERT INTO `disco` VALUES (null, {diskUsage.percent}, '{horarioAtual}');"
+    comando = f"INSERT INTO `disco` VALUES (null, {diskUsage}, '{horarioAtual}');"
     mycursor.execute(comando)
     mydb.commit()
 
