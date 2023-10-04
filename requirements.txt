@@ -3,3 +3,4 @@ psutil
 matplotlib
 mysql-connector
 mysql
+python-dotenv
