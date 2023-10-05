@@ -1,9 +1,8 @@
 import datetime
 import platform as plat
-from time import sleep as s
 
 import psutil as ps
-from connection import executar
+from acesso_banco.connection import executar
 from message import mensagem_slack
 
 osv = plat.uname().system

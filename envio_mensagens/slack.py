@@ -1,6 +1,7 @@
 import requests
 import json
 
+
 def slack_alerta(alerta):
     mensagem = {
         "text": f"""
