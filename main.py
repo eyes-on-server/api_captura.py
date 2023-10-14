@@ -10,8 +10,8 @@ import datetime as dt
 cpu = Cpu()
 memoria = Memoria()
 disco = Disco()
-processos = Processos()
 rede = Rede()
+processos = Processos()
 
 
 def start():
@@ -22,14 +22,13 @@ def start():
 
         cpu.get_cpu_frequency(momento)
         cpu.get_cpu_usage_percent(momento)
-        cpu.get_cpu_status()
         memoria.get_memory_usage_percent(momento)
         disco.get_disk_usage_percent(momento)
         rede.get_sent_bytes(momento)
         rede.get_received_bytes(momento)
         processos.get_processos()
 
-        s(1)
+        s(5)
 
 
 start()

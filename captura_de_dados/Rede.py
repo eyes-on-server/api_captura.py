@@ -1,5 +1,5 @@
 import psutil
-from acesso_banco.registro_dao import inserir_registro
+from dao.registro_dao import inserir_registro
 from math import *
 
 

@@ -1,6 +1,6 @@
 import psutil
-from acesso_banco.registro_dao import inserir_registro
-import datetime as dt
+from envio_mensagens.pipefy import enviar_mensagem
+from dao.registro_dao import inserir_registro
 import platform as plt
 from math import *
 
@@ -40,4 +40,22 @@ class Disco:
         inserir_registro(6, 3, 2, disk_usage_percent_6, momento)
 
         return disk_usage_percent
-    
+
+    def verificar_disco(self, disco, momento, id_server, nome_servidor):
+
+        tipo_alerta = ""
+
+        if(disco >= 95):
+            tipo_alerta = "Emergência"
+        elif(disco >= 90):
+            tipo_alerta = "Perigo"
+        elif(disco >= 85):
+            tipo_alerta = "Prevenção"
+        else:
+            return
+
+        titulo_alerta = f"Alerta: Disco em Estado de {tipo_alerta}!"
+        mensagem = (f"Detectamos que o Disco do servidor {nome_servidor} entrou no estado de {tipo_alerta}. "
+                    f"Um chamado foi aberto na help desk de sua empresa para a solução rápida desse problema!")
+
+        enviar_mensagem(titulo_alerta, mensagem, tipo_alerta, momento, id_server)

@@ -1,6 +1,5 @@
-JIRA
 psutil
-matplotlib
 mysql-connector
-mysql
+mysql-connector-python
 python-dotenv
+requests

@@ -1,6 +1,6 @@
 import psutil as ps
-from acesso_banco.registro_dao import inserir_registro
-import datetime as dt
+from envio_mensagens.pipefy import enviar_mensagem
+from dao.registro_dao import inserir_registro
 from math import *
 
 
@@ -22,6 +22,13 @@ class Cpu:
         inserir_registro(5, 1, 2, cpu_percent_5, momento)
         inserir_registro(6, 1, 2, cpu_percent_6, momento)
 
+        self.verificar_cpu(cpu_percent, momento, 1, 'F4-A2')
+        self.verificar_cpu(cpu_percent, momento, 2, 'A3-B9')
+        self.verificar_cpu(cpu_percent, momento, 3, 'E2-F0')
+        self.verificar_cpu(cpu_percent, momento, 4, 'A5-B3')
+        self.verificar_cpu(cpu_percent, momento, 5, 'C1-A1')
+        self.verificar_cpu(cpu_percent, momento, 6, 'D4-D2')
+
         return cpu_percent
 
     def get_cpu_frequency(self, momento):
@@ -42,3 +49,21 @@ class Cpu:
         cpu_interrupcoes = ps.cpu_stats().interrupts
         print(cpu_interrupcoes)
 
+    def verificar_cpu(self, cpu, momento, id_server, nome_servidor):
+
+        tipo_alerta = ""
+
+        if(cpu >= 95):
+            tipo_alerta = "Emergência"
+        elif(cpu >= 85):
+            tipo_alerta = "Perigo"
+        elif(cpu >= 75):
+            tipo_alerta = "Prevenção"
+        else:
+            return
+
+        titulo_alerta = f"Alerta: Cpu em Estado de {tipo_alerta}!"
+        mensagem = (f"Detectamos que a CPU do servidor {nome_servidor} entrou no estado de {tipo_alerta}. "
+                    f"Um chamado foi aberto na help desk de sua empresa para a solução rápida desse problema!")
+
+        enviar_mensagem(titulo_alerta, mensagem, tipo_alerta, momento, id_server)
