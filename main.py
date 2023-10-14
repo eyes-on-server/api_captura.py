@@ -4,11 +4,13 @@ from captura_de_dados.Cpu import Cpu
 from captura_de_dados.Memoria import Memoria
 from captura_de_dados.Disco import Disco
 from captura_de_dados.Rede import Rede
+from captura_de_dados.Processos import Processos
 import datetime as dt
 
 cpu = Cpu()
 memoria = Memoria()
 disco = Disco()
+processos = Processos()
 rede = Rede()
 
 
@@ -25,7 +27,7 @@ def start():
         disco.get_disk_usage_percent(momento)
         rede.get_sent_bytes(momento)
         rede.get_received_bytes(momento)
-
+        processos.get_processos()
 
         s(1)
 
