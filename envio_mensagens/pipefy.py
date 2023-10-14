@@ -11,7 +11,9 @@ id_pipe = os.environ.get('ID_PIPE')
 url = "https://api.pipefy.com/graphql"
 
 
-def enviar_mensagem(titulo, tipo, mensagem, momento, id_server):
+def enviar_mensagem(titulo, tipo, mensagem, momento, id_server, fk_componente):
+
+    print('entrei no envio de mensagens!')
 
     body = {"query": "mutation"
                      "{ "
@@ -53,4 +55,4 @@ def enviar_mensagem(titulo, tipo, mensagem, momento, id_server):
 
     print(response.text)
 
-    inserir_alerta(3, id_server, 1, titulo, mensagem, momento, tipo)
+    inserir_alerta(3, id_server, fk_componente, titulo, mensagem, momento, tipo)

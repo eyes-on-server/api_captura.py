@@ -31,6 +31,13 @@ class Memoria:
         inserir_registro(5, 2, 2, memory_usage_percent_5, momento)
         inserir_registro(6, 2, 2, memory_usage_percent_6, momento)
 
+        self.verificar_memoria(memory_usage_percent, momento, 1, 'F4-A2')
+        self.verificar_memoria(memory_usage_percent_2, momento, 2, 'A3-B9')
+        self.verificar_memoria(memory_usage_percent_3, momento, 3, 'E2-F0')
+        self.verificar_memoria(memory_usage_percent_4, momento, 4, 'A5-B3')
+        self.verificar_memoria(memory_usage_percent_5, momento, 5, 'C1-A1')
+        self.verificar_memoria(memory_usage_percent_6, momento, 6, 'D4-D2')
+
         return memory_usage_percent
 
     def verificar_memoria(self, memoria, momento, id_server, nome_servidor):
@@ -50,4 +57,4 @@ class Memoria:
         mensagem = (f"Detectamos que a Memória do servidor {nome_servidor} entrou no estado de {tipo_alerta}. "
                     f"Um chamado foi aberto na help desk de sua empresa para a solução rápida desse problema!")
 
-        enviar_mensagem(titulo_alerta, mensagem, tipo_alerta, momento, id_server)
+        enviar_mensagem(titulo_alerta, tipo_alerta, mensagem, momento, id_server, 2)

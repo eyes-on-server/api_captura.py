@@ -23,11 +23,11 @@ class Cpu:
         inserir_registro(6, 1, 2, cpu_percent_6, momento)
 
         self.verificar_cpu(cpu_percent, momento, 1, 'F4-A2')
-        self.verificar_cpu(cpu_percent, momento, 2, 'A3-B9')
-        self.verificar_cpu(cpu_percent, momento, 3, 'E2-F0')
-        self.verificar_cpu(cpu_percent, momento, 4, 'A5-B3')
-        self.verificar_cpu(cpu_percent, momento, 5, 'C1-A1')
-        self.verificar_cpu(cpu_percent, momento, 6, 'D4-D2')
+        self.verificar_cpu(cpu_percent_2, momento, 2, 'A3-B9')
+        self.verificar_cpu(cpu_percent_3, momento, 3, 'E2-F0')
+        self.verificar_cpu(cpu_percent_4, momento, 4, 'A5-B3')
+        self.verificar_cpu(cpu_percent_5, momento, 5, 'C1-A1')
+        self.verificar_cpu(cpu_percent_6, momento, 6, 'D4-D2')
 
         return cpu_percent
 
@@ -66,4 +66,4 @@ class Cpu:
         mensagem = (f"Detectamos que a CPU do servidor {nome_servidor} entrou no estado de {tipo_alerta}. "
                     f"Um chamado foi aberto na help desk de sua empresa para a solução rápida desse problema!")
 
-        enviar_mensagem(titulo_alerta, mensagem, tipo_alerta, momento, id_server)
+        enviar_mensagem(titulo_alerta, tipo_alerta, mensagem, momento, id_server, 1)

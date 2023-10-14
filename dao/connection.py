@@ -13,6 +13,7 @@ databaseServer = os.environ.get("DB_NAME")
 
 def executar(instrucao, valores):
 
+    print('entrei no executar!')
     global conexao
     global comando
 
