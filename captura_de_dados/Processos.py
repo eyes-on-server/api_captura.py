@@ -14,6 +14,3 @@ class Processos:
             
             except ps.NoSuchProcess:
                 pass
-
-
-    

@@ -15,43 +15,39 @@ def enviar_mensagem(titulo, tipo, mensagem, momento, id_server, fk_componente):
 
     print('entrei no envio de mensagens!')
 
-    body = {"query": "mutation"
-                     "{ "
-                        "createCard( input: "
-                        "{ "
-                            "pipe_id: " + id_pipe + ", "
-                            "title: \"Alerta\", "
-                            "fields_attributes: "
-                                "["
-                                    "{"
-                                        "field_id: \"t_tulo_do_alerta\", "
-                                        "field_value: \"" + titulo + "\""
-                                    "}"
-                                    "{"
-                                        "field_id: \"tipo\", "
-                                        "field_value: \"" + tipo + "\""
-                                    "}"
-                                    "{"
-                                        "field_id: \"mensagem\", "
-                                        "field_value: \"" + mensagem + "\""
-                                    "}"
-                                "]"
-                        "}) "
-                        "{"
-                            "card "
-                                "{"
-                                    "title"
-                                "} "
-                        "}"
-                     "}"
-            }
+    query = f"""
+    mutation {{
+        createCard(input: {{
+            pipe_id: "{id_pipe}",
+            title: "Alerta",
+            fields_attributes: [
+                {{
+                    field_id: "t_tulo_do_alerta",
+                    field_value: "{titulo}"
+                }},
+                {{
+                    field_id: "tipo",
+                    field_value: "{tipo}"
+                }},
+                {{
+                    field_id: "mensagem",
+                    field_value: "{mensagem}"
+                }}
+            ]
+        }}) {{
+            card {{
+                title
+            }}
+        }}
+    }}
+    """
 
     headers = {
         "authorization": token,
         "content-type": "application/json"
     }
 
-    response = requests.post(url, headers=headers, json=body)
+    response = requests.post(url, headers=headers, json={"query": query})
 
     print(response.text)
 

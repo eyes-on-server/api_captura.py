@@ -46,4 +46,3 @@ def executar(instrucao, valores):
     except mysql.connector.Error as erro:
         print("Erro ao executar comando!")
         print(erro)
-
