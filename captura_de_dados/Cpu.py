@@ -1,7 +1,9 @@
 import psutil as ps
 from envio_mensagens.pipefy import enviar_mensagem
 from dao.registro_dao import inserir_registro
+from crawler.crawler_OPHM import request_temperature
 from math import *
+import platform as plt
 
 
 class Cpu:
@@ -48,6 +50,28 @@ class Cpu:
     def get_cpu_status(self):
         cpu_interrupcoes = ps.cpu_stats().interrupts
         print(cpu_interrupcoes)
+
+    def get_cpu_temp(self, momento):
+
+        cpu_temp = 0
+
+        if plt.system() == 'Linux':
+            cpu_temp = ps.sensors_temperatures()['coretemp'][0].current
+        elif plt.system() == 'Windows':
+            cpu_temp = request_temperature()
+
+        cpu_temp_2 = round(cpu_temp + (cpu_temp * 0.05), 1)
+        cpu_temp_3 = round(cpu_temp / 2 - (cpu_temp * 0.1) - (cpu_temp_2 * 0.05), 1)
+        cpu_temp_4 = round(cpu_temp / 3 + (sqrt(cpu_temp_3) - sqrt(cpu_temp_2)) - (sin(cpu_temp)), 1)
+        cpu_temp_5 = round(cpu_temp - (cos(pow(cpu_temp_2, 2)) + cpu_temp_3 * 0.15) - (cpu_temp_4 * 0.10), 1)
+        cpu_temp_6 = round(cpu_temp + (cpu_temp_2 - cpu_temp_3 * 0.1) - sqrt(cpu_temp_5), 1)
+
+        inserir_registro(1, 1, 1, cpu_temp, momento)
+        inserir_registro(2, 1, 1, cpu_temp_2, momento)
+        inserir_registro(3, 1, 1, cpu_temp_3, momento)
+        inserir_registro(4, 1, 1, cpu_temp_4, momento)
+        inserir_registro(5, 1, 1, cpu_temp_5, momento)
+        inserir_registro(6, 1, 1, cpu_temp_6, momento)
 
     def verificar_cpu(self, cpu, momento, id_server, nome_servidor):
 
