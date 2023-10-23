@@ -56,9 +56,15 @@ class Cpu:
         cpu_temp = 0
 
         if plt.system() == 'Linux':
-            cpu_temp = ps.sensors_temperatures()['coretemp'][0].current
+            try:
+                cpu_temp = ps.sensors_temperatures()['coretemp'][0].current
+            except Exception as erro:
+                return 0
         elif plt.system() == 'Windows':
-            cpu_temp = request_temperature()
+            try:
+                cpu_temp = request_temperature()
+            except Exception as erro:
+                return 0
 
         cpu_temp_2 = round(cpu_temp + (cpu_temp * 0.05), 1)
         cpu_temp_3 = round(cpu_temp / 2 - (cpu_temp * 0.1) - (cpu_temp_2 * 0.05), 1)
@@ -72,6 +78,8 @@ class Cpu:
         inserir_registro(4, 1, 1, cpu_temp_4, momento)
         inserir_registro(5, 1, 1, cpu_temp_5, momento)
         inserir_registro(6, 1, 1, cpu_temp_6, momento)
+
+        return cpu_temp
 
     def verificar_cpu(self, cpu, momento, id_server, nome_servidor):
 

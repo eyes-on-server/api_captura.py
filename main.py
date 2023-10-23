@@ -22,7 +22,8 @@ def start():
 
         cpu.get_cpu_frequency(momento)
         cpu.get_cpu_usage_percent(momento)
-        cpu.get_cpu_temp(momento)
+        if cpu.get_cpu_temp(momento) != 0:
+            cpu.get_cpu_temp(momento)
         memoria.get_memory_usage_percent(momento)
         disco.get_disk_usage_percent(momento)
         rede.get_sent_bytes(momento)

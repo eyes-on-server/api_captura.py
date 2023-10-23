@@ -22,4 +22,3 @@ def request_temperature():
             tamanho += 1
 
         return soma / tamanho
-
