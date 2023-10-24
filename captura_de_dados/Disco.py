@@ -39,12 +39,12 @@ class Disco:
         inserir_registro(5, 3, 2, disk_usage_percent_5, momento)
         inserir_registro(6, 3, 2, disk_usage_percent_6, momento)
 
-        self.verificar_disco(disk_usage_percent, momento, 1, 'F4-A2')
-        self.verificar_disco(disk_usage_percent_2, momento, 2, 'A3-B9')
-        self.verificar_disco(disk_usage_percent_3, momento, 3, 'E2-F0')
-        self.verificar_disco(disk_usage_percent_4, momento, 4, 'A5-B3')
-        self.verificar_disco(disk_usage_percent_5, momento, 5, 'C1-A1')
-        self.verificar_disco(disk_usage_percent_6, momento, 6, 'D4-D2')
+        self.verificar_disco(disk_usage_percent, momento, 1, 'DN141')
+        self.verificar_disco(disk_usage_percent_2, momento, 2, 'DV921')
+        self.verificar_disco(disk_usage_percent_3, momento, 3, 'FE091')
+        self.verificar_disco(disk_usage_percent_4, momento, 4, 'IS592')
+        self.verificar_disco(disk_usage_percent_5, momento, 5, 'OT114')
+        self.verificar_disco(disk_usage_percent_6, momento, 6, 'PA404')
 
         return disk_usage_percent
 
