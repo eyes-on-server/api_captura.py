@@ -4,3 +4,4 @@ mysql-connector-python
 python-dotenv
 requests
 urllib3
+pandas
