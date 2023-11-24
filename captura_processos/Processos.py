@@ -1,5 +1,5 @@
 import psutil as ps
-from dao.registro_dao import inserir_processo
+from dao.processos_dao import inserir_processo
 
 
 class Processos:

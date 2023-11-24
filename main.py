@@ -1,36 +1,28 @@
 # EXECUTE ESSE ARQUIVO
-from time import sleep as s
-from captura_de_dados.Cpu import Cpu
-from captura_de_dados.Memoria import Memoria
-from captura_de_dados.Disco import Disco
-from captura_de_dados.Rede import Rede
-from captura_de_dados.Processos import Processos
-import datetime as dt
-
-cpu = Cpu()
-memoria = Memoria()
-disco = Disco()
-rede = Rede()
-processos = Processos()
-
-
-def start():
-
-    while True:
-
-        momento = dt.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-
-        cpu.get_cpu_frequency(momento)
-        cpu.get_cpu_usage_percent(momento)
-        if cpu.get_cpu_temp(momento) != 0:
-            cpu.get_cpu_temp(momento)
-        memoria.get_memory_usage_percent(momento)
-        disco.get_disk_usage_percent(momento)
-        rede.get_sent_bytes(momento)
-        rede.get_received_bytes(momento)
-        processos.get_processos()
-
-        s(5)
+# from time import sleep as s
+# from captura_processos.Processos import Processos
+# import datetime as dt
+#
+# processos = Processos()
+#
+#
+# def start():
+#
+#     while True:
+#
+#         momento = dt.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+#
+#         processos.get_processos()
+#
+#         s(5)
 
 
-start()
+# start()
+
+from enumerators.componentes_monitorados import ComponentesMonitorados
+from dao.servidor_dao import consultar_servidor
+
+for element in ComponentesMonitorados:
+    print(element.value['nome'])
+
+print(consultar_servidor("32423"))
