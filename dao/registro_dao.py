@@ -1,4 +1,7 @@
-from database.conexao import executar
+from database.conexao import criar_conexao
+
+conexao = criar_conexao()
+comando = conexao.cursor()
 
 
 def inserir_registro(fk_servidor, fk_componente, fk_medida, valor_registro, momento):
@@ -8,4 +11,8 @@ def inserir_registro(fk_servidor, fk_componente, fk_medida, valor_registro, mome
 
     values = [fk_servidor, fk_componente, fk_medida, valor_registro, momento]
 
-    executar(query, values)
+    comando.execute(query, values)
+    conexao.commit()
+
+    comando.close()
+    conexao.close()

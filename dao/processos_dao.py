@@ -1,4 +1,7 @@
-from database.conexao import executar
+from database.conexao import criar_conexao
+
+conexao = criar_conexao()
+comando = conexao.cursor()
 
 
 def inserir_processo(pid_processo, nome_processo, fk_servidor):
@@ -7,4 +10,8 @@ def inserir_processo(pid_processo, nome_processo, fk_servidor):
 
     values = [pid_processo, nome_processo, fk_servidor]
 
-    executar(query, values)
+    comando.execute(query, values)
+    conexao.commit()
+
+    comando.close()
+    conexao.close()

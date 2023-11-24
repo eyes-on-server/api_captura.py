@@ -25,4 +25,4 @@ from dao.servidor_dao import consultar_servidor
 for element in ComponentesMonitorados:
     print(element.value['nome'])
 
-print(consultar_servidor("32423"))
+print(consultar_servidor("00:1B:44:11:3A:B7")[0][0])

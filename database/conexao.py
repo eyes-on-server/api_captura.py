@@ -11,11 +11,7 @@ userServer = os.environ.get("DB_USER")
 databaseServer = os.environ.get("DB_NAME")
 
 
-def executar(instrucao, valores):
-
-    global conexao
-    global comando
-
+def criar_conexao():
     try:
         conexao = sql.connect(
             host=hostServer,
@@ -23,25 +19,8 @@ def executar(instrucao, valores):
             user=userServer,
             database=databaseServer,
         )
-        comando = conexao.cursor()
+
+        return conexao
 
     except mysql.connector.Error as error:
         print(f"Erro ao efetuar conexão >>> {error}")
-
-    try:
-        print(f"""
-            Comando >>> {instrucao}
-            Valores >>> {valores}
-        """)
-
-        if valores:
-            comando.execute(instrucao, valores)
-
-        conexao.commit()
-
-        comando.close()
-        conexao.close()
-
-    except mysql.connector.Error as erro:
-        print("Erro ao executar comando!")
-        print(erro)

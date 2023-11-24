@@ -1,4 +1,7 @@
-from database.conexao import executar
+from database.conexao import criar_conexao
+
+conexao = criar_conexao()
+comando = conexao.cursor()
 
 
 def inserir_alerta(fk_empresa, fk_servidor, fk_componente, titulo, desc, momento, tipo):
@@ -7,4 +10,8 @@ def inserir_alerta(fk_empresa, fk_servidor, fk_componente, titulo, desc, momento
              "descricao_alerta, data_hora_abertura, tipoAlerta) VALUES (%s, %s, %s, %s, %s, %s, %s);")
     valores = [fk_empresa, fk_servidor, fk_componente, titulo, desc, momento, tipo]
 
-    executar(query, valores)
+    comando.execute(query, valores)
+    conexao.commit()
+
+    comando.close()
+    conexao.close()
