@@ -6,4 +6,12 @@ class DiscoUso(Executavel.Executavel):
 
     def executar(self):
         particoes = ps.disk_partitions()
-        print(particoes)
+        total = 0
+
+        for particao in particoes:
+            total += ps.disk_usage(particao.device).percent
+
+        uso_disco = total / len(particoes)
+        print(uso_disco)
+
+        return uso_disco
