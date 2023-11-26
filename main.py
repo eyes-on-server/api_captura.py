@@ -1,11 +1,29 @@
 # EXECUTE ESSE ARQUIVO
 
 from terminal.leitura_componentes import *
-from multiprocessing import Process
 from time import sleep
 import datetime as dt
 from captura_processos.processos import get_processos
-from dao.registro_dao import inserir_registro
+from dao.registro_dao import *
+from dao.servidor_dao import consultar_servidor
+from dao.downtime_dao import inserir_downtime
+import psutil as ps
+
+
+def verificar_downtime():
+
+    fk_servidor = consultar_servidor(ps.net_if_addrs()['Ethernet'][0].address)[0][0]
+    ultimo_momento_registro = ultimo_registro(fk_servidor)[0][0]
+    penultimo_momento_registro = penultimo_registro(fk_servidor, ultimo_momento_registro)[0][0]
+
+    margem = 25
+    prejuizo_por_segundo = 1111111.1
+
+    if penultimo_momento_registro is not None and ultimo_momento_registro is not None:
+        diferenca = (ultimo_momento_registro - penultimo_momento_registro).total_seconds()
+
+        if diferenca > margem:
+            inserir_downtime(fk_servidor, diferenca - 20, (diferenca - 20) * prejuizo_por_segundo)
 
 
 def iniciar_leitura():
@@ -29,6 +47,7 @@ def iniciar_leitura():
             executaveis = obter_executaveis()
             ticks = 0
 
+        verificar_downtime()
         sleep(10)
 
 
