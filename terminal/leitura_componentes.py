@@ -2,17 +2,13 @@ from enumerators.componentes_monitorados import ComponentesMonitorados
 from dao.servidor_dao import *
 from dao.view_componente_servidor import *
 from dao.login_dao import realizar_login
-from dao.registro_dao import inserir_registro
 from terminal.novo_dispositivo import cadastrar_novo_servidor
-
-from time import sleep
 import psutil as ps
-import datetime as dt
 
 mac_address = ps.net_if_addrs()['Ethernet'][0].address
 
 
-def run():
+def autenticar_maquina():
 
     fk_empresa = login()
 
@@ -22,7 +18,7 @@ def run():
 
     print("\nIniciando leitura dos componentes!\n")
 
-    iniciar_leitura(obter_executaveis())
+    return obter_executaveis()
 
 
 def login():
@@ -57,27 +53,3 @@ def obter_executaveis():
                 break
 
     return lista_executaveis
-
-
-def iniciar_leitura(lista_executaveis):
-
-    executaveis = lista_executaveis
-    ticks = 0
-
-    while True:
-
-        momento = dt.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-
-        for executavel in executaveis:
-            id_componente_servidor = coletar_id_componente_servidor(mac_address, executavel.name)[0][0]
-            valor = executavel.value["metodo"].executar()
-
-            inserir_registro(id_componente_servidor, valor, momento)
-
-        ticks += 1
-
-        if ticks == 3:
-            executaveis = obter_executaveis()
-            ticks = 0
-
-        sleep(10)
