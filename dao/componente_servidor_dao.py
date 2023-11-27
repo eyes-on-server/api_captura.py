@@ -1,9 +1,9 @@
-from database.conexao import criar_conexao
+from database.conexao import criar_conexao_mysql
 
 
 def inserir_componente_servidor(fk_servidor, fk_componente_medida):
 
-    conexao = criar_conexao()
+    conexao = criar_conexao_mysql()
     comando = conexao.cursor()
 
     query = "INSERT INTO Eyes_On_Server.Componente_Servidor VALUES (null, %s, %s);"

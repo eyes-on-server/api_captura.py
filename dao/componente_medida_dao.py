@@ -1,9 +1,9 @@
-from database.conexao import criar_conexao
+from database.conexao import criar_conexao_mysql
 
 
 def consultar_componente_medida(tipo):
 
-    conexao = criar_conexao()
+    conexao = criar_conexao_mysql()
     comando = conexao.cursor()
 
     query = "SELECT id_componente_medida FROM Eyes_On_Server.Componente_Medida where tipo = %s;"

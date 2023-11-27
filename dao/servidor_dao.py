@@ -1,9 +1,9 @@
-from database.conexao import criar_conexao
+from database.conexao import criar_conexao_mysql
 
 
 def consultar_servidor(mac_address):
 
-    conexao = criar_conexao()
+    conexao = criar_conexao_mysql()
     comando = conexao.cursor()
 
     query = "SELECT * FROM Eyes_On_Server.Servidor WHERE mac_address = %s;"
@@ -28,7 +28,7 @@ def cadastrar_servidor(
         descricao
 ):
 
-    conexao = criar_conexao()
+    conexao = criar_conexao_mysql()
     comando = conexao.cursor()
 
     query = "INSERT INTO Eyes_On_Server.Servidor VALUES (null, %s, %s, %s, %s, %s, %s, %s);"

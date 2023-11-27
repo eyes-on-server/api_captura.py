@@ -1,9 +1,9 @@
-from database.conexao import criar_conexao
+from database.conexao import criar_conexao_mysql
 
 
 def realizar_login(login, senha):
 
-    conexao = criar_conexao()
+    conexao = criar_conexao_mysql()
     comando = conexao.cursor()
 
     query = "SELECT id_empresa, login, senha FROM Eyes_On_Server.View_Login WHERE login = %s AND senha = %s;"

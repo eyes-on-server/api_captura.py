@@ -1,9 +1,9 @@
-from database.conexao import criar_conexao
+from database.conexao import criar_conexao_mysql
 
 
 def consultar_componente_servidor(mac_address):
 
-    conexao = criar_conexao()
+    conexao = criar_conexao_mysql()
     comando = conexao.cursor()
 
     query = "SELECT * FROM Eyes_On_Server.view_componentes_servidores WHERE `macAddress` = %s;"
@@ -20,7 +20,7 @@ def consultar_componente_servidor(mac_address):
 
 def coletar_id_componente_servidor(mac_address, tipo):
 
-    conexao = criar_conexao()
+    conexao = criar_conexao_mysql()
     comando = conexao.cursor()
 
     query = ("SELECT `idComponenteServidor` FROM Eyes_On_Server.view_componentes_servidores WHERE `macAddress` = %s "
