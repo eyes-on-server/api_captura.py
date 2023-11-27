@@ -31,6 +31,7 @@ def iniciar_leitura():
             ticks = 0
 
         utils.verificar_downtime()
+        utils.calcular_consumo_geral_servidor()
         sleep(10)
 
 

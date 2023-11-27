@@ -1,5 +1,5 @@
 import os
-import mysql.connector as mysql
+import mysql.connector as mysql_con
 import mysql.connector.errorcode
 from dotenv import load_dotenv
 
@@ -13,7 +13,7 @@ databaseServer = os.environ.get("DB_NAME")
 
 def criar_conexao_mysql():
     try:
-        conexao = mysql.connect(
+        conexao = mysql_con.connect(
             host=hostServer,
             password=passwordServer,
             user=userServer,
