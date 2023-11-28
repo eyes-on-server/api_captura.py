@@ -1,15 +1,17 @@
 from dao.downtime_dao import inserir_downtime
+from dao.consumo_servidor_dao import inserir_consumo_servidor
 import psutil as ps
 from dao.servidor_dao import consultar_servidor
 from dao.registro_dao import *
 from captura_psutil.cpu.cpu_uso import *
 from captura_psutil.memoria.memoria_uso import *
 from captura_psutil.disco.disco_uso import *
+from captura_psutil.rede.rede_get_mac_address import *
 
 
 def verificar_downtime():
 
-    fk_servidor = consultar_servidor(ps.net_if_addrs()['Ethernet'][0].address)[0][0]
+    fk_servidor = validar_so()
     ultimo_momento_registro = ultimo_registro(fk_servidor)[0][0]
     penultimo_momento_registro = penultimo_registro(fk_servidor, ultimo_momento_registro)[0][0]
 
@@ -23,8 +25,13 @@ def verificar_downtime():
             inserir_downtime(fk_servidor, diferenca - 20, (diferenca - 20) * prejuizo_por_segundo)
 
 
-def calcular_consumo_geral_servidor(memoria_uso, cpu_percent, uso_disco):
-     while True:
+def calcular_consumo_geral_servidor():
+    cpu_percent = CpuUso().executar()
+    memoria_uso = MemoriaUso().executar()
+    uso_disco = DiscoUso().executar()
+
+    while True:
+        fk_servidor = validar_so()
 
         limite_cpu = 0.7  
         limite_memo = 0.7  
@@ -33,5 +40,5 @@ def calcular_consumo_geral_servidor(memoria_uso, cpu_percent, uso_disco):
         consumo_geral = (cpu_percent * limite_cpu) - (memoria_uso * limite_memo) - (uso_disco * limite_disco)
         consumo_geral = consumo_geral *(-1)
 
-        print("Consumo total da máquina: {:.2f}%".format(consumo_geral))
+        inserir_consumo_servidor(fk_servidor, consumo_geral)
  
