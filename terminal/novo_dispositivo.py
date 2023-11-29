@@ -1,9 +1,10 @@
+import math
+
 from dao.componente_medida_dao import consultar_componente_medida
 from dao.componente_servidor_dao import inserir_componente_servidor
 from dao.servidor_dao import *
 from enumerators.componentes_monitorados import ComponentesMonitorados
-
-import psutil as ps
+from utils.informacoes_maquina import get_ipv6
 import os
 
 
@@ -28,7 +29,7 @@ def cadastrar_novo_servidor(fk_empresa, mac_address):
 
 def cadastrar(fk_empresa, mac_address):
 
-    ipv6 = ps.net_if_addrs()['Ethernet'][2].address
+    ipv6 = get_ipv6()
     sistema_operacional = os.name
 
     nome_servidor = str(input("Nome Servidor: "))
@@ -63,12 +64,17 @@ def selecionar_componentes(lista_componentes_monitorados):
 
         print(f'{i + 2} - Finalizar')
 
-        opcao = int(input("Sua opção: "))
+        try:
+            opcao = int(input("Sua opção: "))
+        except ValueError:
+            opcao = 0
 
         if opcao == i + 2:
             break
-
-        componentes_selecionados.append(lista_componentes_monitorados[opcao - 1])
-        lista_componentes_monitorados.pop(opcao - 1)
+        elif opcao <= 0 or opcao > len(lista_componentes_monitorados) or math.isnan(opcao):
+            print("Digite um número dentro do intervalo informado!")
+        else:
+            componentes_selecionados.append(lista_componentes_monitorados[opcao - 1])
+            lista_componentes_monitorados.pop(opcao - 1)
 
     return componentes_selecionados

@@ -1,5 +1,6 @@
 from database.conexao import criar_conexao_mysql
 
+
 def inserir_consumo_servidor(fk_servidor, porcentagem_uso):
 
     conexao = criar_conexao_mysql()

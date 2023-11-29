@@ -3,9 +3,9 @@ from dao.servidor_dao import *
 from dao.view_componente_servidor import *
 from dao.login_dao import realizar_login
 from terminal.novo_dispositivo import cadastrar_novo_servidor
-import psutil as ps
+from utils.informacoes_maquina import get_mac_address
 
-mac_address = ps.net_if_addrs()['Ethernet'][0].address
+mac_address = get_mac_address()
 
 
 def autenticar_maquina():

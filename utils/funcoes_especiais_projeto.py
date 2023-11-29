@@ -4,12 +4,13 @@ from dao.registro_dao import *
 from captura_psutil.cpu.cpu_uso import *
 from captura_psutil.memoria.memoria_uso import *
 from captura_psutil.disco.disco_uso import *
-from captura_psutil.rede.rede_get_mac_address import *
+from dao.servidor_dao import consultar_servidor
+from utils.informacoes_maquina import get_mac_address
 
 
 def verificar_downtime():
 
-    fk_servidor = validar_so()
+    fk_servidor = consultar_servidor(get_mac_address())[0][0]
     ultimo_momento_registro = ultimo_registro(fk_servidor)[0][0]
     penultimo_momento_registro = penultimo_registro(fk_servidor, ultimo_momento_registro)[0][0]
 
@@ -24,18 +25,21 @@ def verificar_downtime():
 
 
 def calcular_consumo_geral_servidor():
+
     cpu_percent = CpuUso().executar()
     memoria_uso = MemoriaUso().executar()
     uso_disco = DiscoUso().executar()
 
-    fk_servidor = validar_so()
+    fk_servidor = consultar_servidor(get_mac_address())[0][0]
 
     limite_cpu = 0.7
     limite_memo = 0.7
     limite_disco = 0.7
 
     consumo_geral = (cpu_percent * limite_cpu) - (memoria_uso * limite_memo) - (uso_disco * limite_disco)
-    consumo_geral = consumo_geral *(-1)
+    consumo_geral = consumo_geral * (-1)
 
     inserir_consumo_servidor(fk_servidor, consumo_geral)
+
+    print(f"Consumo do servidor: {consumo_geral}%")
  
