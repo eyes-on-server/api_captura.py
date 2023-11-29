@@ -7,6 +7,7 @@ from captura_processos.processos import get_processos
 from dao.registro_dao import *
 from dao.servidor_dao import consultar_servidor
 import utils.funcoes_especiais_projeto as utils
+from threading import Thread
 
 
 def iniciar_leitura():
@@ -32,20 +33,22 @@ def iniciar_leitura():
 
         utils.verificar_downtime()
         utils.calcular_consumo_geral_servidor()
+
         sleep(10)
 
 
-def ler_processos(fk_servidor):
-    print('Lendo processos:')
-
+def ler_processos():
     while True:
-        get_processos(fk_servidor)
+        get_processos(consultar_servidor(mac_address)[0][0])
         sleep(10)
 
 
 lista_executaveis = autenticar_maquina()
 
-iniciar_leitura()
-ler_processos(consultar_servidor(mac_address)[0][0])
+processo_leitura_registros = Thread(target=iniciar_leitura)
+processo_leitura_processos = Thread(target=ler_processos)
+
+processo_leitura_registros.start()
+processo_leitura_processos.start()
 
 print('Finalizando!')

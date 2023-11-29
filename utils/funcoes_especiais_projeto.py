@@ -1,7 +1,5 @@
 from dao.downtime_dao import inserir_downtime
 from dao.consumo_servidor_dao import inserir_consumo_servidor
-import psutil as ps
-from dao.servidor_dao import consultar_servidor
 from dao.registro_dao import *
 from captura_psutil.cpu.cpu_uso import *
 from captura_psutil.memoria.memoria_uso import *
@@ -30,15 +28,14 @@ def calcular_consumo_geral_servidor():
     memoria_uso = MemoriaUso().executar()
     uso_disco = DiscoUso().executar()
 
-    while True:
-        fk_servidor = validar_so()
+    fk_servidor = validar_so()
 
-        limite_cpu = 0.7  
-        limite_memo = 0.7  
-        limite_disco = 0.7  
+    limite_cpu = 0.7
+    limite_memo = 0.7
+    limite_disco = 0.7
 
-        consumo_geral = (cpu_percent * limite_cpu) - (memoria_uso * limite_memo) - (uso_disco * limite_disco)
-        consumo_geral = consumo_geral *(-1)
+    consumo_geral = (cpu_percent * limite_cpu) - (memoria_uso * limite_memo) - (uso_disco * limite_disco)
+    consumo_geral = consumo_geral *(-1)
 
-        inserir_consumo_servidor(fk_servidor, consumo_geral)
+    inserir_consumo_servidor(fk_servidor, consumo_geral)
  
