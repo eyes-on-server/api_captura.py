@@ -6,6 +6,4 @@ class RedeBytesRecebidos(Executavel.Executavel):
 
     def executar(self):
         rede_bytes_recebidos = ps.net_io_counters().bytes_recv
-        print(rede_bytes_recebidos)
-
         return rede_bytes_recebidos

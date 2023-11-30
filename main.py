@@ -24,6 +24,9 @@ def iniciar_leitura():
             valor = executavel.value["metodo"].executar()
 
             inserir_registro(id_componente_servidor, valor, momento)
+            print(f'{executavel.value["nome"]}: {valor}')
+
+        print('\n')
 
         ticks += 1
 

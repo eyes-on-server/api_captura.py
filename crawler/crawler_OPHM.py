@@ -7,18 +7,24 @@ def conversor(valor):
 
 
 def request_temperature():
+
+    tamanho = 0
+    soma = 0
+
     with PoolManager() as pool:
 
-        response = pool.request('GET', 'http://localhost:9000/data.json')
-        data = loads(response.data.decode('utf-8'))
+        try:
+            response = pool.request('GET', 'http://localhost:9000/data.json')
+            data = loads(response.data.decode('utf-8'))
 
-        tamanho = 0
-        soma = 0
+            for i in data['Children'][0]['Children'][1]['Children'][1]['Children']:
 
-        for i in data['Children'][0]['Children'][1]['Children'][1]['Children']:
+                print(f"{i['Text']}: Temperatura Atual >>> {conversor(i['Value'])} °C")
+                soma += conversor(i['Value'])
+                tamanho += 1
+        except IndexError as erro:
+            print('Erro! Não foi possível capturar a temperatura da sua máquina com o Open Hardware Monitor! ', erro)
+        except Exception as erro:
+            print('Não foi possível efetuar a conexão com o Open Hardware Monitor! ', erro)
 
-            print(f"{i['Text']}: Temperatura Atual >>> {conversor(i['Value'])} °C")
-            soma += conversor(i['Value'])
-            tamanho += 1
-
-        return soma / tamanho
+        return soma / tamanho if tamanho > 0 else 0

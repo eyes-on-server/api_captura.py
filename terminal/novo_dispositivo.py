@@ -5,7 +5,7 @@ from dao.componente_servidor_dao import inserir_componente_servidor
 from dao.servidor_dao import *
 from enumerators.componentes_monitorados import ComponentesMonitorados
 from utils.informacoes_maquina import get_ipv6
-import os
+import platform as plt
 
 
 def cadastrar_novo_servidor(fk_empresa, mac_address):
@@ -30,7 +30,7 @@ def cadastrar_novo_servidor(fk_empresa, mac_address):
 def cadastrar(fk_empresa, mac_address):
 
     ipv6 = get_ipv6()
-    sistema_operacional = os.name
+    sistema_operacional = plt.system()
 
     nome_servidor = str(input("Nome Servidor: "))
     local_servidor = str(input("Local do Servidor: "))

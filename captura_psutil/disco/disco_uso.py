@@ -12,6 +12,5 @@ class DiscoUso(Executavel.Executavel):
             total += ps.disk_usage(particao.device).percent
 
         uso_disco = total / len(particoes)
-        print(uso_disco)
 
         return uso_disco
