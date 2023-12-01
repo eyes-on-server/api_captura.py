@@ -9,7 +9,14 @@ class CpuTemperatura(Executavel.Executavel):
     def executar(self):
 
         if plt.system() == 'Linux':
-            cpu_temp = ps.sensors_temperatures()['coretemp'][0].current
+            try:
+                soma = 0
+                for key in ps.sensors_temperatures().keys():
+                    soma += ps.sensors_temperatures()[key][0].current
+                cpu_temp = soma / len(ps.sensors_temperatures().keys())
+            except Exception as erro:
+                print('Não foi possível ler a temperatura: ', erro)
+                cpu_temp = 0
         else:
             cpu_temp = request_temperature()
 
