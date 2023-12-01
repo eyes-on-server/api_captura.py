@@ -2,6 +2,9 @@ import os
 import requests
 from dotenv import load_dotenv
 from dao.alertas_dao import inserir_alerta
+from dao.componente_medida_dao import consultar_componente_medida
+from dao.servidor_dao import consultar_servidor
+from utils.informacoes_maquina import get_mac_address
 
 load_dotenv()
 
@@ -11,9 +14,14 @@ id_pipe = os.environ.get('ID_PIPE')
 url = "https://api.pipefy.com/graphql"
 
 
-def enviar_mensagem(titulo, tipo, mensagem, momento, id_server, fk_componente):
+def enviar_mensagem(tipo_alerta, momento, tipo_componente_medida, valor):
 
     print('entrei no envio de mensagens!')
+
+    servidor = consultar_servidor(get_mac_address())[0]
+
+    titulo = f"Alerta {tipo_alerta} no servidor {servidor[2]}"
+    mensagem = f"Detectamos que o/a {tipo_componente_medida.value['nome']} registrou um valor de {valor}, entrando assim no estado de {tipo_alerta}"
 
     query = f"""
     mutation {{
@@ -27,7 +35,7 @@ def enviar_mensagem(titulo, tipo, mensagem, momento, id_server, fk_componente):
                 }},
                 {{
                     field_id: "tipo",
-                    field_value: "{tipo}"
+                    field_value: "{tipo_alerta}"
                 }},
                 {{
                     field_id: "mensagem",
@@ -51,4 +59,4 @@ def enviar_mensagem(titulo, tipo, mensagem, momento, id_server, fk_componente):
 
     print(response.text)
 
-    inserir_alerta(3, id_server, fk_componente, titulo, mensagem, momento, tipo)
+    inserir_alerta(servidor[1], servidor[0], consultar_componente_medida(tipo_componente_medida.name)[0][0], titulo, mensagem, momento, tipo_alerta)

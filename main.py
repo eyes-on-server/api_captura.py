@@ -6,12 +6,13 @@ import datetime as dt
 from captura_processos.processos import get_processos
 from dao.registro_dao import *
 from dao.servidor_dao import consultar_servidor
+from dao.componente_medida_dao import coletar_metricas
 import utils.funcoes_especiais_projeto as utils
 from threading import Thread
+from envio_mensagens.pipefy import enviar_mensagem
 
 
 def iniciar_leitura():
-
     executaveis = lista_executaveis
     ticks = 0
 
@@ -25,6 +26,8 @@ def iniciar_leitura():
 
             inserir_registro(id_componente_servidor, valor, momento)
             print(f'{executavel.value["nome"]}: {valor}')
+
+            verificar_metricas(executavel, valor, momento)
 
         print('\n')
 
@@ -44,6 +47,24 @@ def ler_processos():
     while True:
         get_processos(consultar_servidor(mac_address)[0][0])
         sleep(10)
+
+
+def verificar_metricas(executavel, valor, momento):
+    metricas = coletar_metricas(executavel.name)[0]
+    tipo_alerta = ""
+
+    if metricas[0] is not None:
+        if valor >= metricas[0]:
+            tipo_alerta = "Emergência"
+        elif valor >= metricas[1]:
+            tipo_alerta = "Perigo"
+        elif valor >= metricas[2]:
+            tipo_alerta = "Prevenção"
+        else:
+            print("Componente não apresenta alerta!")
+
+    if tipo_alerta != "":
+        enviar_mensagem(tipo_alerta, momento, executavel, valor)
 
 
 lista_executaveis = autenticar_maquina()
