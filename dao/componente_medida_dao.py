@@ -1,35 +1,71 @@
 from database.conexao import criar_conexao_mysql
+from database.conexao import criar_conexao_sql
+producao = True
 
 
-def consultar_componente_medida(tipo):
+if producao == False:
+    def consultar_componente_medida(tipo):
 
-    conexao = criar_conexao_mysql()
-    comando = conexao.cursor()
+        conexao = criar_conexao_mysql()
+        comando = conexao.cursor()
 
-    query = "SELECT id_componente_medida FROM Eyes_On_Server.Componente_Medida where tipo = %s;"
-    valores = [tipo]
+        query = "SELECT id_componente_medida FROM Eyes_On_Server.Componente_Medida where tipo = %s;"
+        valores = [tipo]
 
-    comando.execute(query, valores)
-    resultados = comando.fetchall()
+        comando.execute(query, valores)
+        resultados = comando.fetchall()
 
-    comando.close()
-    conexao.close()
+        comando.close()
+        conexao.close()
 
-    return resultados
+        return resultados
 
 
-def coletar_metricas(tipo):
-    conexao = criar_conexao_mysql()
-    comando = conexao.cursor()
+    def coletar_metricas(tipo):
+        conexao = criar_conexao_mysql()
+        comando = conexao.cursor()
 
-    query = ("SELECT valor_alerta_emergencia, valor_alerta_perigo, valor_alerta_prevencao FROM "
-             "Eyes_On_Server.Componente_Medida where tipo = %s;")
-    valores = [tipo]
+        query = ("SELECT valor_alerta_emergencia, valor_alerta_perigo, valor_alerta_prevencao FROM "
+                "Eyes_On_Server.Componente_Medida where tipo = %s;")
+        valores = [tipo]
 
-    comando.execute(query, valores)
-    resultados = comando.fetchall()
+        comando.execute(query, valores)
+        resultados = comando.fetchall()
 
-    comando.close()
-    conexao.close()
+        comando.close()
+        conexao.close()
 
-    return resultados
+        return resultados
+else: 
+    def consultar_componente_medida(tipo):
+
+        conexao = criar_conexao_sql()
+        comando = conexao.cursor()
+
+        query = "SELECT id_componente_medida FROM Componente_Medida where tipo = ?;"
+        valores = (tipo)
+
+        comando.execute(query, valores)
+        resultados = comando.fetchall()
+
+        comando.close()
+        conexao.close()
+
+        return resultados
+
+
+    def coletar_metricas(tipo):
+        conexao = criar_conexao_sql()
+        comando = conexao.cursor()
+
+        query = ("SELECT valor_alerta_emergencia, valor_alerta_perigo, valor_alerta_prevencao FROM "
+                "Componente_Medida where tipo = ?;")
+        valores = [tipo]
+
+        comando.execute(query, valores)
+        resultados = comando.fetchall()
+
+        comando.close()
+        conexao.close()
+
+        return resultados
