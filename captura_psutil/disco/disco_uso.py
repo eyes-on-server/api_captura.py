@@ -9,7 +9,10 @@ class DiscoUso(Executavel.Executavel):
         total = 0
 
         for particao in particoes:
-            total += ps.disk_usage(particao.device).percent
+            try:
+                total += ps.disk_usage(particao.device).percent
+            except Exception as e:
+                print("Erro ao ler disco: ", e)
 
         uso_disco = total / len(particoes)
 
