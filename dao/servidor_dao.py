@@ -1,4 +1,4 @@
-from database.conexao import criar_conexao_mysql
+
 from database.conexao import criar_conexao_sql
 producao = True
 
@@ -6,7 +6,7 @@ producao = True
 if producao == False:
     def consultar_servidor(mac_address):
 
-        conexao = criar_conexao_mysql()
+        conexao = criar_conexao_sql()
         comando = conexao.cursor()
 
         query = "SELECT * FROM Eyes_On_Server.Servidor WHERE mac_address = %s;"
@@ -31,7 +31,7 @@ if producao == False:
             descricao
     ):
 
-        conexao = criar_conexao_mysql()
+        conexao = criar_conexao_sql()
         comando = conexao.cursor()
 
         query = "INSERT INTO Eyes_On_Server.Servidor VALUES (null, %s, %s, %s, %s, %s, %s, %s);"

@@ -1,4 +1,4 @@
-from database.conexao import criar_conexao_mysql
+
 from database.conexao import criar_conexao_sql
 producao = True
 
@@ -6,7 +6,7 @@ producao = True
 if producao == False:
     def inserir_registro(fk_componente_servidor, valor_registro, momento):
 
-        conexao = criar_conexao_mysql()
+        conexao = criar_conexao_sql()
         comando = conexao.cursor()
 
         query = "INSERT INTO Eyes_On_Server.Registro VALUES (null, %s, %s, %s);"
@@ -21,7 +21,7 @@ if producao == False:
 
     def ultimo_registro(fk_servidor):
 
-        conexao = criar_conexao_mysql()
+        conexao = criar_conexao_sql()
         comando = conexao.cursor()
 
         query = "SELECT MAX(Momento) FROM View_Registros WHERE Servidor = %s;"
@@ -38,7 +38,7 @@ if producao == False:
 
     def penultimo_registro(fk_servidor, ultimo_momento_registro):
 
-        conexao = criar_conexao_mysql()
+        conexao = criar_conexao_sql()
         comando = conexao.cursor()
 
         query = "SELECT MAX(Momento) FROM View_Registros WHERE Servidor = %s AND Momento < %s;"

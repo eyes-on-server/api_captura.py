@@ -1,6 +1,7 @@
 import os
 import mysql.connector as mysql_con
 import mysql.connector.errorcode
+import pyodbc
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -14,7 +15,7 @@ databaseServer = os.environ.get("DB_NAME")
 
 
 if producao == False:
-    def criar_conexao_mysql():
+    def criar_conexao_sql():
         try:
             conexao = mysql_con.connect(
                 host=hostServer,

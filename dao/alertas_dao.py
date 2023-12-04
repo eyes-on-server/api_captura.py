@@ -1,4 +1,4 @@
-from database.conexao import criar_conexao_mysql
+
 from database.conexao import criar_conexao_sql
 producao = True
 
@@ -6,7 +6,7 @@ producao = True
 if producao == False:
     def inserir_alerta(fk_empresa, fk_servidor, fk_componente_medida, titulo, desc, momento, tipo):
 
-        conexao = criar_conexao_mysql()
+        conexao = criar_conexao_sql()
         comando = conexao.cursor()
 
         query = ("INSERT INTO Eyes_On_Server.Alertas (fk_empresa, fk_servidor, fk_componente_medida, titulo_alerta, "

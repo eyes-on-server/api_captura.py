@@ -1,4 +1,4 @@
-from database.conexao import criar_conexao_mysql
+
 from database.conexao import criar_conexao_sql
 producao = True
 
@@ -6,7 +6,7 @@ producao = True
 if producao == False:
     def consultar_componente_medida(tipo):
 
-        conexao = criar_conexao_mysql()
+        conexao = criar_conexao_sql()
         comando = conexao.cursor()
 
         query = "SELECT id_componente_medida FROM Eyes_On_Server.Componente_Medida where tipo = %s;"
@@ -22,7 +22,7 @@ if producao == False:
 
 
     def coletar_metricas(tipo):
-        conexao = criar_conexao_mysql()
+        conexao = criar_conexao_sql()
         comando = conexao.cursor()
 
         query = ("SELECT valor_alerta_emergencia, valor_alerta_perigo, valor_alerta_prevencao FROM "
