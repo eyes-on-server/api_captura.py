@@ -21,7 +21,7 @@ def verificar_downtime():
         diferenca = (ultimo_momento_registro - penultimo_momento_registro).total_seconds()
 
         if diferenca > margem:
-            inserir_downtime(fk_servidor, diferenca - 20, (diferenca - 20) * prejuizo_por_segundo)
+            inserir_downtime(fk_servidor, diferenca - margem, (diferenca - margem) * prejuizo_por_segundo)
 
 
 def calcular_consumo_geral_servidor():
@@ -36,7 +36,7 @@ def calcular_consumo_geral_servidor():
     limite_memo = 0.7
     limite_disco = 0.85
 
-    
+
 
     consumo_geral = (cpu_percent * limite_cpu) - (memoria_uso * limite_memo) - (uso_disco * limite_disco)
     consumo_geral = abs(consumo_geral)
